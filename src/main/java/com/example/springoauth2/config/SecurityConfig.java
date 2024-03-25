@@ -25,7 +25,8 @@ public class SecurityConfig {
 
         http.oauth2Login(
                 (oauth2) -> oauth2
-                        .userInfoEndpoint(
+                        .loginPage("/login") // 커스텀 로그인 페이지 URI
+                        .userInfoEndpoint( // 사용자 정보 받는 설정
                                 (userInfoEndpointConfig -> userInfoEndpointConfig
                                         .userService(customOAuth2UserService))
                         )
