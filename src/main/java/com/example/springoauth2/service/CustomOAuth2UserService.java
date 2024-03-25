@@ -1,5 +1,6 @@
 package com.example.springoauth2.service;
 
+import com.example.springoauth2.dto.CustomOAuth2User;
 import com.example.springoauth2.dto.GoogleResponse;
 import com.example.springoauth2.dto.NaverResponse;
 import com.example.springoauth2.dto.OAuth2Response;
@@ -33,5 +34,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         // TODO : 추가 구현
+        String role = "ROLE_USER"; // 역할 부여
+
+        return new CustomOAuth2User(oAuth2Response, role);
     }
 }
