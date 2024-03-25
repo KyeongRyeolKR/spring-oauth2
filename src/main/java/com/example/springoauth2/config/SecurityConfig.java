@@ -1,5 +1,7 @@
 package com.example.springoauth2.config;
 
+import com.example.springoauth2.service.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,7 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -18,7 +23,13 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable); // 자체 폼 로그인을 사용하지 않으므로 비활성화
         http.httpBasic(AbstractHttpConfigurer::disable); // http basic 방식도 사용하지 않으므로 비활성화
 
-        http.oauth2Login(Customizer.withDefaults()); // oauth2 로그인 방식 사용 -> 추후 설정 변경 예정
+        http.oauth2Login(
+                (oauth2) -> oauth2
+                        .userInfoEndpoint(
+                                (userInfoEndpointConfig -> userInfoEndpointConfig
+                                        .userService(customOAuth2UserService))
+                        )
+        ); // oauth2 로그인 방식 사용
 
         http.authorizeHttpRequests(
                 (auth) -> auth
