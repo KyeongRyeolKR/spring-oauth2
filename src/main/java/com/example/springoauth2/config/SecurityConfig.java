@@ -1,10 +1,12 @@
 package com.example.springoauth2.config;
 
 import com.example.springoauth2.oauth2.CustomClientRegistrationRepository;
+import com.example.springoauth2.oauth2.CustomOAuth2AuthorizedClientService;
 import com.example.springoauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +19,8 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 //    private final CustomClientRegistrationRepository customClientRegistrationRepository;
+//    private final CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService;
+    private final JdbcTemplate jdbcTemplate;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,6 +32,7 @@ public class SecurityConfig {
                 (oauth2) -> oauth2
                         .loginPage("/login") // 커스텀 로그인 페이지 URI
 //                        .clientRegistrationRepository(customClientRegistrationRepository.clientRegistrationRepository()) // OAuth2 서비스 정보를 클래스로 관리하기 위한 설정
+//                        .authorizedClientService(customOAuth2AuthorizedClientService.oAuth2AuthorizedClientService(jdbcTemplate, customClientRegistrationRepository.clientRegistrationRepository())) // OAuth2 사용자의 액세스 토큰이나 정보를 외부 DB에 저장하기 위한 설정
                         .userInfoEndpoint( // 사용자 정보 받는 설정
                                 (userInfoEndpointConfig -> userInfoEndpointConfig
                                         .userService(customOAuth2UserService))
